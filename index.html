@@ -74,7 +74,7 @@ Header
 <script>
 document.addEventListener('scroll', (e) => {
   console.log(document.documentElement.scrollTop);
-  const scrollTop = document.documentElement.scrollTop;
+  const scrollTop = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
   const dom = document.querySelector('header');
   const h = document.querySelector('.h');
   if(scrollTop > 50) {
