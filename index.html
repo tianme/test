@@ -1,90 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>UIWebViewBug</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>javascript-demo</title>
   <style>
     * {
-      margin: 0;
       padding: 0;
+      margin: 0;
     }
-  header{
-    height: 50px;
-    background: #ff0;
-    text-align: center;
-    line-height: 50px;
-  }
-  .header-fixed {
-    position:fixed;
-    width: 100%;
-  }
-  ul {
-    list-style: none;
-    border: solid red 1px;
-    border-left: 0;
-    border-right: 0;
 
-  }
-  li {
-    line-height: 50px;
-    text-align: center;
-  }
-  li + li {
-    border-top: 1px solid red;
-  }
-  .h {
-    display: none;
-  }
+    body {
+      margin: 10px;
+    }
+
+    .textarea-box {
+      display: flex;
+    }
+
+    button {
+      padding: 5px;
+    }
+
+    #textarea {
+      flex: 1;
+      font-size: .16rem;
+      height: 3rem;
+      padding: 0.05rem;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+    }
   </style>
-</head>
-<body>
-<header class="">
-Header
-</header>
-<header class="h">
+  <script>
+    (function () {
+      var baseFontSize = 100;
+      var baseWidth = 375;
 
-</header>
-<div>
-  <ul>
-    <li>test1</li>
-    <li>test2</li>
-    <li>test3</li>
-    <li>test5</li>
-    <li>test6</li>
-    <li>test7</li>
-    <li>test8</li>
-    <li>test9</li>
-    <li>test10</li>
-    <li>test11</li>
-    <li>test12</li>
-    <li>test13</li>
-    <li>test14</li>
-    <li>test15</li>
-    <li>test16</li>
-    <li>test17</li>
-    <li>test13</li>
-    <li>test14</li>
-    <li>test15</li>
-    <li>test16</li>
-    <li>test17</li>
-  </ul>
-</div>
-<script>
-document.addEventListener('scroll', (e) => {
-  console.log(document.documentElement.scrollTop);
-  const scrollTop = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
-  const dom = document.querySelector('header');
-  const h = document.querySelector('.h');
-  if(scrollTop > 50) {
-    dom.classList.add('header-fixed');
-    h.style.display = 'block';
-  } else if (scrollTop <= 0){
-    dom.classList.remove('header-fixed');
-    h.style.display = 'none';
-  }
-});
-</script>
+      var set = function () {
+        var clientWidth = document.documentElement.clientWidth || window.innerWidth;
+
+        var rem = 100;
+        if (clientWidth != baseWidth) {
+          rem = Math.floor(clientWidth / baseWidth * baseFontSize);
+        }
+
+        document.querySelector('html').style.fontSize = rem + 'px';
+      }
+      set();
+
+      window.addEventListener('resize', set);
+    }());
+  </script>
+</head>
+
+<body>
+  <div>
+    <div class="textarea-box">
+      <textarea id="textarea"></textarea>
+    </div>
+    <div class="btns" >
+      <button id="call-native-params">调用 Native 带参数</button>
+      <button id="call-native">调用 Native 不带参数</button>
+    </div>
+  </div>
+  <script>
+
+
+    var textarea = document.querySelector('#textarea');
+    var callNativeParams = document.querySelector('#call-native-params');
+    var callNative = document.querySelector('#call-native');
+    document.addEventListener('WebViewJavascriptBridgeReady', (event) => {
+      event.bridge.init();
+      // 注册方法
+      event.bridge.registerHandler('ZDJSBridge_nativeCallJs', (res, responseCallback) => {
+        textarea.value = `ZDJSBridge_nativeCallJs\n${JSON.stringify(res, null, 2)}`;
+        responseCallback({
+          code: '0',
+          data: 'Javascript Says Right back aka!',
+          message: '成功'
+        });
+      });
+    });
+
+
+    callNative.addEventListener('click', (e) => {
+
+      window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', null, (res) => {
+        textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
+      });
+    });
+    callNativeParams.addEventListener('click', (e) => {
+      var params = {
+        message: 'hello world',
+      }
+      window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', params,  (res) => {
+        // res: { code: '0', data: { }, message: '' }
+        textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
+
+      });
+    });
+    var noticeiOSInjectScript = () => {
+      var iframe = document.createElement('iframe');
+
+      iframe.src = 'https://__bridge_loaded__';
+      iframe.style.display = 'none';
+
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 0);
+    }
+    noticeiOSInjectScript();
+  </script>
 </body>
+
 </html>
