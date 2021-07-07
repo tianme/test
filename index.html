@@ -57,178 +57,10 @@
       window.addEventListener('resize', set);
     }());
   </script>
-  <script>
-    (function (global, factory) {
-        typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-          typeof define === 'function' && define.amd ? define(factory) :
-            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.JSBirdge = factory());
-      }(this, (function () {
-        'use strict';
-
-        function _classCallCheck(instance, Constructor) {
-          if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-          }
-        }
-
-        function _defineProperties(target, props) {
-          for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];
-            descriptor.enumerable = descriptor.enumerable || false;
-            descriptor.configurable = true;
-            if ("value" in descriptor) descriptor.writable = true;
-            Object.defineProperty(target, descriptor.key, descriptor);
-          }
-        }
-
-        function _createClass(Constructor, protoProps, staticProps) {
-          if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-          if (staticProps) _defineProperties(Constructor, staticProps);
-          return Constructor;
-        }
-
-        /*! *****************************************************************************
-        Copyright (c) Microsoft Corporation.
-
-        Permission to use, copy, modify, and/or distribute this software for any
-        purpose with or without fee is hereby granted.
-
-        THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-        REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-        AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-        INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-        LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-        OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-        PERFORMANCE OF THIS SOFTWARE.
-        ***************************************************************************** */
-
-        function __classPrivateFieldGet(receiver, state, kind, f) {
-          if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-          if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-          return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-        }
-
-        function __classPrivateFieldSet(receiver, state, value, kind, f) {
-          if (kind === "m") throw new TypeError("Private method is not writable");
-          if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
-          if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-          return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-        }
-
-        var _App_instances, _App_birdge, _App_getBirdge;
-
-        var App = /*#__PURE__*/function () {
-          function App(birdge) {
-            _classCallCheck(this, App);
-
-            _App_instances.add(this);
-
-            _App_birdge.set(this, void 0);
-
-            __classPrivateFieldSet(this, _App_birdge, birdge, "f");
-          }
-
-          _createClass(App, [{
-            key: "setNativeBar",
-            value: function setNativeBar(nativeBarInfo) {
-              var birdge = __classPrivateFieldGet(this, _App_instances, "m", _App_getBirdge).call(this);
-
-              birdge.callHandler('ZDJSBridge_setNativeBar', nativeBarInfo);
-            }
-          }]);
-
-          return App;
-        }();
-
-        _App_birdge = new WeakMap(), _App_instances = new WeakSet(), _App_getBirdge = function _App_getBirdge() {
-          if (__classPrivateFieldGet(this, _App_birdge, "f") === null) {
-            throw new Error('javascript birdge not call');
-          }
-
-          return __classPrivateFieldGet(this, _App_birdge, "f");
-        };
-
-        var _CPGroupJSBirdge_instances, _CPGroupJSBirdge_readyCallbacks, _CPGroupJSBirdge_inited, _CPGroupJSBirdge_dispatchCallbacks;
-
-        var CPGroupJSBirdge = /*#__PURE__*/function () {
-          function CPGroupJSBirdge() {
-            var _this = this;
-
-            _classCallCheck(this, CPGroupJSBirdge);
-
-            _CPGroupJSBirdge_instances.add(this);
-
-            _CPGroupJSBirdge_readyCallbacks.set(this, void 0);
-
-            _CPGroupJSBirdge_inited.set(this, void 0);
-
-            this.app = new App(null);
-            this.birdge = {
-              registerHandler: function registerHandler() { },
-              callHandler: function callHandler() { }
-            };
-
-            __classPrivateFieldSet(this, _CPGroupJSBirdge_inited, false, "f");
-
-            __classPrivateFieldSet(this, _CPGroupJSBirdge_readyCallbacks, [], "f");
-
-            document.addEventListener('WebViewJavascriptBridgeReady', function (readyEvent) {
-              __classPrivateFieldSet(_this, _CPGroupJSBirdge_inited, true, "f");
-
-              var birdge = readyEvent.birdge;
-              _this.app = new App(birdge);
-              birdge.init(function () { });
-              _this.birdge = birdge;
-
-              __classPrivateFieldGet(_this, _CPGroupJSBirdge_instances, "m", _CPGroupJSBirdge_dispatchCallbacks).call(_this);
-            });
-          }
-
-          _createClass(CPGroupJSBirdge, [{
-            key: "ready",
-            value: function ready(fn) {
-              if (__classPrivateFieldGet(this, _CPGroupJSBirdge_inited, "f")) {
-                fn.call(null, this);
-              }
-
-              __classPrivateFieldGet(this, _CPGroupJSBirdge_readyCallbacks, "f").push(fn);
-            }
-          }], [{
-            key: "getInstance",
-            value: function getInstance() {
-              if (this.instance == null) {
-                this.instance = new CPGroupJSBirdge();
-              }
-
-              return this.instance;
-            }
-          }]);
-
-          return CPGroupJSBirdge;
-        }();
-
-        _CPGroupJSBirdge_readyCallbacks = new WeakMap(), _CPGroupJSBirdge_inited = new WeakMap(), _CPGroupJSBirdge_instances = new WeakSet(), _CPGroupJSBirdge_dispatchCallbacks = function _CPGroupJSBirdge_dispatchCallbacks() {
-          var readyCallbacks = __classPrivateFieldGet(this, _CPGroupJSBirdge_readyCallbacks, "f");
-
-          while (readyCallbacks.length) {
-            var fn = readyCallbacks.shift();
-            fn === null || fn === void 0 ? void 0 : fn.call(null, this);
-          }
-        };
-        var cpGroupJSBirdge = CPGroupJSBirdge.getInstance(); // export { CPGroupJSBirdge };
-
-        return cpGroupJSBirdge;
-
-      })));
-
-
-
-
-  </script>
 </head>
 
 <body>
-  <!-- <div>
+  <div>
     <div class="textarea-box">
       <textarea id="textarea"></textarea>
     </div>
@@ -236,43 +68,44 @@
       <button id="call-native-params">调用 Native 带参数</button>
       <button id="call-native">调用 Native 不带参数</button>
     </div>
-  </div> -->
+  </div>
   <script>
 
 
-    // var textarea = document.querySelector('#textarea');
-    // var callNativeParams = document.querySelector('#call-native-params');
-    // var callNative = document.querySelector('#call-native');
-    // document.addEventListener('WebViewJavascriptBridgeReady', (event) => {
-    //   event.bridge.init();
-    //   // 注册方法
-    //   event.bridge.registerHandler('ZDJSBridge_nativeCallJs', (res, responseCallback) => {
-    //     textarea.value = `ZDJSBridge_nativeCallJs\n${JSON.stringify(res, null, 2)}`;
-    //     responseCallback({
-    //       code: '0',
-    //       data: 'Javascript Says Right back aka!',
-    //       message: '成功'
-    //     });
-    //   });
-    // });
+    var textarea = document.querySelector('#textarea');
+    var callNativeParams = document.querySelector('#call-native-params');
+    var callNative = document.querySelector('#call-native');
+    document.addEventListener('WebViewJavascriptBridgeReady', (event) => {
+      alert('ready');
+      event.bridge.init();
+      // 注册方法
+      event.bridge.registerHandler('ZDJSBridge_nativeCallJs', (res, responseCallback) => {
+        textarea.value = `ZDJSBridge_nativeCallJs\n${JSON.stringify(res, null, 2)}`;
+        responseCallback({
+          code: '0',
+          data: 'Javascript Says Right back aka!',
+          message: '成功'
+        });
+      });
+    });
 
 
-    // callNative.addEventListener('click', (e) => {
+    callNative.addEventListener('click', (e) => {
 
-    //   window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', null, (res) => {
-    //     textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
-    //   });
-    // });
-    // callNativeParams.addEventListener('click', (e) => {
-    //   var params = {
-    //     message: 'hello world',
-    //   }
-    //   window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', params,  (res) => {
-    //     // res: { code: '0', data: { }, message: '' }
-    //     textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
+      window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', null, (res) => {
+        textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
+      });
+    });
+    callNativeParams.addEventListener('click', (e) => {
+      var params = {
+        message: 'hello world',
+      }
+      window.WebViewJavascriptBridge.callHandler('ZDJSBridge_getLocation', params,  (res) => {
+        // res: { code: '0', data: { }, message: '' }
+        textarea.value = `common_native_get_location\n\n${JSON.stringify(res, null, 2)}`;
 
-    //   });
-    // });
+      });
+    });
     var noticeiOSInjectScript = () => {
       var iframe = document.createElement('iframe');
 
@@ -285,22 +118,6 @@
       }, 0);
     }
     noticeiOSInjectScript();
-    window.JSBirdge.ready((JSBirdge) => {
-      window.JSBirdge.birdge.registerHandler('rightArrowHandler', () => {
-        alert('点击了右');
-      })
-      window.JSBirdge.app.setNativeBar({
-        showHeaderFlag: '1', //  0 ： 表示不显示安卓头   1 ，表示显示安卓头 ， 2 表示显示安卓头：是菜单页，需显示农场名称
-        showBackIcon: '1',
-        menuTitle: 'balabala',
-        useNativeGoback: true,
-        rightAction: {
-          text: '右按钮',
-          callbackName: 'rightArrowHandler',
-        }
-      });
-    });
-
   </script>
 </body>
 
